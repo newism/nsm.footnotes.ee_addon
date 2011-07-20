@@ -13,10 +13,12 @@
 </style>
 
 {exp:nsm_footnotes
-	ref_prefix="ref-"
-	ref_class="ref"
-	fn_prefix="fn-"
-	fn_class="fn"
+	ref_prefix="ref-" prefix applied to footnotes and reference anchors
+	ref_class="ref" class applied to reference anchors
+	fn_prefix="fn-" prefix applied to reference anchors and footnote ids
+
+	fn_list_class="footnotes" class applied the the ul for generated footnotes
+	fn_class="fn" class applied to footnote list items
 }
 
 	{!--
@@ -33,6 +35,7 @@
 	<p>A major appraisal of {ref name="alpha" /} Bodenwieser’s contribution to dance has yet o be produced. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Vestibulum id ligula porta felis euismod semper. Donec ullamcorper nulla non metus auctor fringilla. Maecenas sed diam eget risus varius blandit sit amet non magna. Curabitur blandit tempus porttitor. Aenean lacinia bibendum nulla sed consectetur.</p>
 	<p>Lorem ipsum dolor sit amet, consectetur {ref}http://digg.com{/ref} adipiscing elit. Sed posuere consectetur est at lobortis. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.</p>
 
+
 <div class="footnotes">
 	<p>{footnote_total_results} Footnotes ({footnote_refs_total_results} references)</p>
 	<ul>
@@ -47,6 +50,12 @@
 				{footnote_content}
 			</li>
 		{/footnotes}
+		
+		{!-- 
+			The {footnotes} tag can also be used as a single variable which outputs a preformatted list.
+			Both the {footnotes} tag pair and single tag cannot be used in a single {exp:nsm_footnotes} tag. It must be one or the other
+		 --}
+		
 	</ul>
 </div>
 {/exp:nsm_footnotes}
