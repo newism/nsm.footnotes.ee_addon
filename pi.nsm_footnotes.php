@@ -8,7 +8,7 @@ require PATH_THIRD.'nsm_footnotes/config.php';
  * Generally a module is better to use than a plugin if if it has not CP backend
  *
  * @package			NsmFootnotes
- * @version			0.0.1
+ * @version			0.1.0
  * @author			Leevi Graham <http://leevigraham.com>
  * @copyright 		Copyright (c) 2007-2010 Newism <http://newism.com.au>
  * @license 		Commercial - please see LICENSE file included with this distribution
@@ -26,8 +26,8 @@ $plugin_info = array(
 	'pi_version' => NSM_FOOTNOTES_VERSION,
 	'pi_author' => 'Leevi Graham',
 	'pi_author_url' => 'http://leevigraham.com/',
-	'pi_description' => 'Parses content for footnotes',
-	'pi_usage' => "Refer to the included README"
+	'pi_description' => 'Parses content for references which are turned into footnotes',
+	'pi_usage' => "http://ee-garage.com/nsm-footnotes"
 );
 
 class Nsm_footnotes{
@@ -39,6 +39,9 @@ class Nsm_footnotes{
 	 */
 	var $return_data = "";
 
+	/**
+	 * Parses the tag content for references and outputs them as footnotes
+	 */
 	function Nsm_footnotes() {
 
 		$EE =& get_instance();
@@ -110,25 +113,26 @@ class Nsm_footnotes{
 		// $tagdata = str_replace(LD."footnotes".RD, $html, $tagdata);
 
 		$data = array(
-			'footnote_total_refs' => count($refs),
+			'footnote_refs_total_results' => count($refs),
 			'footnote_total_results' => count($footnotes)
 		);
 
 		foreach ($footnotes as $count => $footnote) {
 			$fn = array(
+				'footnote_count' => $count,
 				'footnote_content' => $footnote['content'],
 				'footnote_refs_total_results' => count($footnote['refs'])
 			);
-			foreach ($footnote['refs'] as $ref_id) {
-				$fn['footnote_refs'][] = array('footnote_ref_id' => $ref_id);
+			foreach ($footnote['refs'] as $ref_count => $ref_id) {
+				$fn['footnote_refs'][] = array(
+					'footnote_ref_count' => $ref_count,
+					'footnote_ref_id' => $ref_id
+				);
 			}
 			$data['footnotes'][] = $fn;
 		}
 
 		$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
-
-		// print_r($data);
-
 
 		$this->return_data = $tagdata;
 	}
