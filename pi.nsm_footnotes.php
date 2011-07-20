@@ -99,7 +99,6 @@ class Nsm_footnotes{
 			$tagdata = str_replace($ref['tagdata'], $html, $tagdata);
 		}
 
-		// print_r($EE->TMPL->var_single);
 		// Single variable
 		if(in_array('footnotes', $EE->TMPL->var_single)) {
 			$html = "<ul class=".$options['fn_list_class'].">";
