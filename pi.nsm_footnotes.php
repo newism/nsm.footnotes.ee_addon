@@ -51,7 +51,8 @@ class Nsm_footnotes{
 			'ref_prefix' => $EE->TMPL->fetch_param('ref_prefix', 'ref-'),
 			'ref_class' =>  $EE->TMPL->fetch_param('ref_class', 'ref'),
 			'fn_prefix' => $EE->TMPL->fetch_param('fn_prefix', 'fn-'),
-			'fn_class' => $EE->TMPL->fetch_param('fn_class', 'footnote')
+			'fn_class' => $EE->TMPL->fetch_param('fn_class', 'footnote'),
+			'fn_list_class' => $EE->TMPL->fetch_param('fn_list_class'),
 		);
 
 		// match {fn id="1"}Footnote content{/fn}
@@ -98,41 +99,47 @@ class Nsm_footnotes{
 			$tagdata = str_replace($ref['tagdata'], $html, $tagdata);
 		}
 
-		// $html = false;
-		// foreach ($footnotes as $count => $footnote) {
-		// 	$html .= "<li>";
-		// 	foreach ($footnote['refs'] as $ref) {
-		// 		$html .= "<a 
-		// 					href='#{$options['ref_prefix']}{$ref}' 
-		// 					id='{$options['fn_prefix']}{$ref}'
-		// 					class='{$options['fn_class']}'
-		// 				>{$ref}</a></sup> ";
-		// 	}
-		// 	$html .="{$footnote['content']}</li>";
-		// }
-		// $tagdata = str_replace(LD."footnotes".RD, $html, $tagdata);
-
-		$data = array(
-			'footnote_refs_total_results' => count($refs),
-			'footnote_total_results' => count($footnotes)
-		);
-
-		foreach ($footnotes as $count => $footnote) {
-			$fn = array(
-				'footnote_count' => $count,
-				'footnote_content' => $footnote['content'],
-				'footnote_refs_total_results' => count($footnote['refs'])
-			);
-			foreach ($footnote['refs'] as $ref_count => $ref_id) {
-				$fn['footnote_refs'][] = array(
-					'footnote_ref_count' => $ref_count,
-					'footnote_ref_id' => $ref_id
-				);
+		print_r($EE->TMPL->var_single);
+		// Single variable
+		if(in_array('footnotes', $EE->TMPL->var_single)) {
+			$html = "<ul class=".$options['fn_list_class'].">";
+			foreach ($footnotes as $count => $footnote) {
+				$html .= "<li>";
+				foreach ($footnote['refs'] as $ref) {
+					$html .= "<a 
+								href='#{$options['ref_prefix']}{$ref}' 
+								id='{$options['fn_prefix']}{$ref}'
+								class='{$options['fn_class']}'
+							>{$ref}</a></sup> ";
+				}
+				$html .="{$footnote['content']}</li>";
 			}
-			$data['footnotes'][] = $fn;
+			$html .= "</ul>";
+			$tagdata = str_replace(LD."footnotes".RD, $html, $tagdata);
+		} else {
+			$data = array(
+				'footnote_refs_total_results' => count($refs),
+				'footnote_total_results' => count($footnotes)
+			);
+
+			foreach ($footnotes as $count => $footnote) {
+				$fn = array(
+					'footnote_count' => $count,
+					'footnote_content' => $footnote['content'],
+					'footnote_refs_total_results' => count($footnote['refs'])
+				);
+				foreach ($footnote['refs'] as $ref_count => $ref_id) {
+					$fn['footnote_refs'][] = array(
+						'footnote_ref_count' => $ref_count,
+						'footnote_ref_id' => $ref_id
+					);
+				}
+				$data['footnotes'][] = $fn;
+			}
+
+			$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
 		}
 
-		$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
 
 		$this->return_data = $tagdata;
 	}
