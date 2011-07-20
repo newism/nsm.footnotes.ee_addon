@@ -1,0 +1,57 @@
+<style type="text/css" media="screen">
+	body{font-family: sans-serif;}
+	:target{background:yellow; padding:5px;}
+	.fn, .ref{vertical-align: super; font-size:10px;}
+	.footnotes {
+		background:#eee;
+		border:1px solid #ccc;
+		padding:0 18px;
+	}
+</style>
+
+{exp:nsm_footnotes
+	ref_prefix="ref-"
+	ref_class="ref"
+	fn_prefix="fn-"
+	fn_class="fn"
+}
+
+	{!--
+		Create references in the content like so:
+
+		{ref}Reference content{/ref} - Creates a reference
+		{ref name="xxx"}Reference content{/ref} - Creates a named reference
+		{ref name="xxx" /} - Reuse a named reference
+
+		Output footnotes: See {footnotes} tagpair below
+	--}
+
+	<h1>Acts/Becomings: The Dance Practices of Gertud Bodenwiser </h1>
+	<p>The Dance Practices of Gertud Bodenwiser {ref}http://reddit.com{/ref} Heritage and heresy 1997 {ref name="alpha"}http://google.com{/ref} - heritage-and-heresy-1997Acts/Becomings:<p>Nulla vitae elit libero, a pharetra augue. Curabitur blandit tempus porttitor. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Maecenas faucibus mollis interdum.</p>
+	<p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Vestibulum id ligula porta felis euismod semper.</p>
+	<h2>Introduction</h2>
+	<p>History is concerned with the construction of narratives from extant traces of the past. Inevitably this is a fragmentary and partial process. Some stories are told and some remain ‘hidden from history’. The history of Gertrud Bodenwiser as dancer, teacher and choreographer is largely reliant upon an embodied legacy which circulates in the dance practices of individuals who have come into contact with her work. Dance knowledge is largely an uembodied tradition &mdash; we learn to dance by observing the movement of others.</p>
+	<p>A major appraisal of {ref name="alpha" /} Bodenwieser’s contribution to dance has yet o be produced. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Vestibulum id ligula porta felis euismod semper. Donec ullamcorper nulla non metus auctor fringilla. Maecenas sed diam eget risus varius blandit sit amet non magna. Curabitur blandit tempus porttitor. Aenean lacinia bibendum nulla sed consectetur.</p>
+	<p>Nullam id dolor id nibh ultricies vehicula ut id elit. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+	<p>Nulla vitae elit libero, a pharetra augue. Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+	<p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+	<p>Lorem ipsum dolor sit amet, consectetur {ref}http://digg.com{/ref} adipiscing elit. Sed posuere consectetur est at lobortis. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.</p>
+	<p>Nullam quis risus eget urna mollis ornare vel eu leo. Aenean lacinia bibendum nulla sed consectetur. Vestibulum id ligula porta felis euismod semper. Vestibulum id ligula porta felis euismod semper.</p>
+
+<div class="footnotes">
+	<p>{footnote_total_results} Footnotes ({footnote_total_refs} references)</p>
+	<ul>
+		{!-- Tag Pair --}
+		{footnotes}
+			<li>
+				{!-- Loop over each of the references in the document that link to this footnote --}
+				{footnote_refs}
+					<a href="#ref-{footnote_ref_id}" id="fn-{footnote_ref_id}" class="fn">{footnote_ref_id}</a>
+				{/footnote_refs}
+				{!-- Output the footnote --}
+				{footnote_content}
+			</li>
+		{/footnotes}
+	</ul>
+</div>
+{/exp:nsm_footnotes}
