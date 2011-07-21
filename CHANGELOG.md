@@ -1,6 +1,22 @@
 NSM Footnotes - Changelog
 ==========================
 
+v0.2.1
+------
+
+* Parse conditionals when using a single {footnotes} tag instead of a tag pair.
+
+v0.2.0
+------
+
+* Rewrote tags / parsing. Now uses the [[ ... ]] tag syntax and "#xxx" named reference syntax
+* Added more classes for auto generated footnotes 
+* Named eferences in the body now show the same footnote index 
+* Added footnote count 
+* Added a simple caret for to start footnotes 
+* Multiple reference anchors in the footnotes are alpha 
+* Updated example template
+
 v0.1.0
 ------
 
