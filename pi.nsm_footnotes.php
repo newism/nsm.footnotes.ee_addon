@@ -51,90 +51,124 @@ class Nsm_footnotes{
 			'ref_prefix' => $EE->TMPL->fetch_param('ref_prefix', 'ref-'),
 			'ref_class' =>  $EE->TMPL->fetch_param('ref_class', 'ref'),
 			'fn_prefix' => $EE->TMPL->fetch_param('fn_prefix', 'fn-'),
-			'fn_class' => $EE->TMPL->fetch_param('fn_class', 'footnote')
+			'left_delimiter' => $EE->TMPL->fetch_param('left_delimiter', '\[\['),
+			'right_delimiter' => $EE->TMPL->fetch_param('right_delimiter', '\]\]'),
+
+			'fn_list_class' => $EE->TMPL->fetch_param('fn_list_class'),
+			'fn_class' => $EE->TMPL->fetch_param('fn_class', 'footnote'),
+			'fn_count_class' => $EE->TMPL->fetch_param('fn_count_class', 'footnote-count'),
+			'fn_ref_class' => $EE->TMPL->fetch_param('fn_ref_class', 'footnote-reference'),
+			'fn_caret_class' =>  $EE->TMPL->fetch_param('fn_caret_class', 'footnote-caret'),
 		);
 
-		// match {fn id="1"}Footnote content{/fn}
-		// match {fn id="1" /}
-		preg_match_all("#{ref(.*?)(?:/}|}(.*?)({/ref}))#", $tagdata, $matches);
-
-		$refs = array();
-		foreach(array_keys($matches[0]) as $count) {
-			$refs[$count] = array(
-				'tagdata' => $matches[0][$count],
-				'tagparams' => $EE->functions->assign_parameters($matches[1][$count]),
-				'content' => $matches[2][$count],
-				'tagpair' => empty($matches[2][$count])
-			);
-		}
-		// print_r($refs);
+		preg_match_all("#".$options['left_delimiter']."\s*(\#[^\s]+)?(.*?)".$options['right_delimiter']."#", $tagdata, $matches, PREG_SET_ORDER);
 
 		$footnotes = array();
-		foreach ($refs as $count => $ref) {
-			// named reference
-			if(isset($ref['tagparams']['name'])) {
-				// that has content
-				if(!empty($ref['content'])) {
-					$footnotes[$ref['tagparams']['name']]['content'] = $ref['content'];
+		foreach ($matches as $count => $match) {
+			$content = trim($match[2]);
+			if(empty($match[1]) == false) {
+				if(empty($content) == false) {
+					$footnotes[$match[1]]['content'] = $content;
 				}
-				// add this reference
-				$footnotes[$ref['tagparams']['name']]['refs'][] = $count;
+				$footnotes[$match[1]]['refs'][] = $match;
 			} else {
-				$footnote = array(
-					'content' => $ref['content'],
-					'refs' => array($count)
+				$footnotes[] = array(
+					'content' => $content,
+					'refs' => array($match)
 				);
-				$footnotes[] = $footnote;
 			}
 		}
 
-		// print_r($footnotes);
-		foreach ($refs as $count => $ref) {
-			$html = "<a 
-						href='#{$options['fn_prefix']}{$count}'
-						id='{$options['ref_prefix']}{$count}'
-						class='{$options['ref_class']}'
-					>{$count}</a>";
-			$tagdata = str_replace($ref['tagdata'], $html, $tagdata);
-		}
-
-		// $html = false;
-		// foreach ($footnotes as $count => $footnote) {
-		// 	$html .= "<li>";
-		// 	foreach ($footnote['refs'] as $ref) {
-		// 		$html .= "<a 
-		// 					href='#{$options['ref_prefix']}{$ref}' 
-		// 					id='{$options['fn_prefix']}{$ref}'
-		// 					class='{$options['fn_class']}'
-		// 				>{$ref}</a></sup> ";
-		// 	}
-		// 	$html .="{$footnote['content']}</li>";
-		// }
-		// $tagdata = str_replace(LD."footnotes".RD, $html, $tagdata);
-
 		$data = array(
-			'footnote_refs_total_results' => count($refs),
-			'footnote_total_results' => count($footnotes)
+			'footnotes_total_results' => count($footnotes),
+			'footnotes_refs_total_results' => 0
 		);
 
-		foreach ($footnotes as $count => $footnote) {
+		// building up a list item incase their is a single {footnotes} tag
+		$footnotes_html = "<ul class=".$options['fn_list_class'].">";
+
+		$footnote_count = 0;
+		foreach ($footnotes as $footnote) {
+
+			$footnote_count++;
+
 			$fn = array(
-				'footnote_count' => $count,
+				'footnote_count' => $footnote_count,
 				'footnote_content' => $footnote['content'],
 				'footnote_refs_total_results' => count($footnote['refs'])
 			);
-			foreach ($footnote['refs'] as $ref_count => $ref_id) {
+
+			$ref_count = 0;
+
+			// building up a list item incase their is a single {footnotes} tag
+			$footnotes_html .= "<li class='".$options['fn_class']."'>";
+			$footnotes_html .= "<span class='".$options['fn_count_class']."'>".$footnote_count."</span>";
+
+			if(count($footnote['refs']) > 1) {
+				$footnotes_html .= "<span class='".$options['fn_caret_class']."'>^</span>";
+			}
+
+			foreach ($footnote['refs'] as $ref) {
+				$ref_count++;
+
+				$ref_id = $this->num_to_letter($ref_count);
+				$ref_content = (count($footnote['refs']) > 1) ? $ref_id : "^";
+
+				$data['footnotes_refs_total_results']++;
+
 				$fn['footnote_refs'][] = array(
 					'footnote_ref_count' => $ref_count,
-					'footnote_ref_id' => $ref_id
+					'footnote_ref_id' => $ref_id,
+					'footnote_ref_content' => $ref_content
 				);
+
+				$tagdata = str_replace($ref['0'], 
+								"<a 
+									href='#{$options['fn_prefix']}{$footnote_count}-{$ref_id}'
+									id='{$options['ref_prefix']}{$footnote_count}-{$ref_id}'
+									class='{$options['ref_class']}'
+								>{$footnote_count}</a>"
+							, $tagdata);
+
+				// building up a list item incase their is a single {footnotes} tag
+				$footnotes_html .= "<a 
+							href='#{$options['ref_prefix']}{$footnote_count}-{$ref_id}' 
+							id='{$options['fn_prefix']}{$footnote_count}-{$ref_id}'
+							class='{$options['fn_ref_class']}'
+						>{$ref_content}</a>";
 			}
+
+			// building up a list item incase their is a single {footnotes} tag
+			$footnotes_html .= $fn['footnote_content'] . "</li>";
+
 			$data['footnotes'][] = $fn;
 		}
+		$footnotes_html .= "</ul>";
 
-		$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
+		// Tagpair or single tag
+		if(in_array('footnotes', $EE->TMPL->var_single) == false) {
+			$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
+		}
+		else {
+			$tagdata = str_replace(LD."footnotes".RD, $footnotes_html, $tagdata);
+		}
 
 		$this->return_data = $tagdata;
+	}
+
+	/**
+	 * Takes a number and converts it to a-z,aa-zz,aaa-zzz, etc with uppercase option
+	 *
+	 * @access	public
+	 * @param	int	number to convert
+	 * @param	bool	upper case the letter on return?
+	 * @return	string	letters from number input
+	 */
+	function num_to_letter($num, $uppercase = FALSE)
+	{
+		$letter = 	chr((($num - 1) % 26) + 97);
+		$letter .= 	(floor($num/26) > 0) ? str_repeat($letter, floor($num/26)) : '';
+		return 	($uppercase ? strtoupper($letter) : $letter); 
 	}
 
 }
