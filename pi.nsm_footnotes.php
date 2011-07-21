@@ -150,6 +150,7 @@ class Nsm_footnotes{
 			$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
 		}
 		else {
+			$tagdata = $EE->functions->prep_conditionals($tagdata, $data);
 			$tagdata = str_replace(LD."footnotes".RD, $footnotes_html, $tagdata);
 		}
 
