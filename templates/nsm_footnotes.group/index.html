@@ -1,10 +1,12 @@
 <style type="text/css" media="screen">
 	body{font-family: sans-serif;}
-	.fn, .ref{vertical-align: super; font-size:10px; padding:5px; color:#fff;}
+	.footnote-reference, .ref{vertical-align: super; font-size:10px; padding:5px; color:#fff;}
 	.ref{background:red;}
-	.fn{background:blue;}
+	.footnote-reference{background:blue;}
 	.ref:target,
-	.fn:target{color:black; background:yellow;}
+	.footnote-reference:target{color:black; background:yellow;}
+	.ref:active,
+	.footnote-reference:active{ background:green;}
 	.footnotes {
 		background:#eee;
 		border:1px solid #ccc;
@@ -31,31 +33,48 @@
 		Output footnotes: See {footnotes} tagpair below
 	--}
 
-	<p>The Dance Practices of Gertud Bodenwiser {ref}http://reddit.com{/ref} Heritage and heresy 1997 {ref name="alpha"}http://google.com{/ref} - heritage-and-heresy-1997Acts/Becomings:<p>Nulla vitae elit libero, a pharetra augue. Curabitur blandit tempus porttitor. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Maecenas faucibus mollis interdum.</p>
-	<p>A major appraisal of {ref name="alpha" /} Bodenwieser’s contribution to dance has yet o be produced. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Vestibulum id ligula porta felis euismod semper. Donec ullamcorper nulla non metus auctor fringilla. Maecenas sed diam eget risus varius blandit sit amet non magna. Curabitur blandit tempus porttitor. Aenean lacinia bibendum nulla sed consectetur.</p>
-	<p>Lorem ipsum dolor sit amet, consectetur {ref}http://digg.com{/ref} adipiscing elit. Sed posuere consectetur est at lobortis. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.</p>
-
+	<ul>
+		<li>Test reference 1 [[<a href="http://google.com" name="google.com">http://google.com</a>]]</li>
+		<li>Test reference 2 [[ #namedRef <em>Named reference</em>]]</li>
+		<li>Test reference 3 [[#namedRef]]</li>
+		<li>Test reference 4 [[  #namedRef ]]</li>
+		<li>Test reference 5 [[  #namedRef]]</li>
+		<li>Test reference 6 [[#namedRef ]]</li>
+		<li>Test reference 7 [[<a href="http://reddit.com" name="reddit.com">http://reddit.com</a>]]</li>
+	</ul>
 
 <div class="footnotes">
-	<p>{footnote_total_results} Footnotes ({footnote_refs_total_results} references)</p>
+	<p>{footnotes_total_results} Footnotes ({footnotes_refs_total_results} references)</p>
+	{!--footnotes--}
+	
+	
+	
 	<ul>
 		{!-- Tag Pair --}
 		{footnotes}
-			<li>
+			<li class="footnote">
+				<span class="footnote-count">{footnote_count}.</span>
+				{if footnote_refs_total_results > 1}
+				<span class="footnote-caret">^</span>
+				{/if}
 				{!-- Loop over each of the references in the document that link to this footnote --}
 				{footnote_refs}
-					<a href="#ref-{footnote_ref_id}" id="fn-{footnote_ref_id}" class="fn">{footnote_ref_id}</a>
+					<a 
+						href="#ref-{footnote_count}-{footnote_ref_id}" 
+						id="fn-{footnote_count}-{footnote_ref_id}" 
+						class="footnote-reference"
+					>{footnote_ref_content}</a>
 				{/footnote_refs}
 				{!-- Output the footnote --}
-				{footnote_content}
+				{footnote_content} <small>({footnote_refs_total_results} instances in the document)</small>
 			</li>
 		{/footnotes}
-		
-		{!-- 
-			The {footnotes} tag can also be used as a single variable which outputs a preformatted list.
-			Both the {footnotes} tag pair and single tag cannot be used in a single {exp:nsm_footnotes} tag. It must be one or the other
-		 --}
-		
 	</ul>
+
+	{!-- 
+		The {footnotes} tag can also be used as a single variable which outputs a preformatted list.
+		Both the {footnotes} tag pair and single tag cannot be used in a single {exp:nsm_footnotes} tag. It must be one or the other
+	 --}
+
 </div>
 {/exp:nsm_footnotes}
