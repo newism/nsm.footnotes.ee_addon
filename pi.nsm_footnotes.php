@@ -112,7 +112,14 @@ class Nsm_footnotes{
 				$ref_count++;
 
 				$ref_id = $this->num_to_letter($ref_count);
-				$ref_content = (count($footnote['refs']) > 1) ? $ref_id : "^";
+
+				if(count($footnote['refs']) > 1){
+					$ref_content = $ref_id;
+					$ref_class = $options['fn_ref_class'];
+				} else {
+					$ref_content = "^";
+					$ref_class = $options['fn_caret_class'] . " " . $options['fn_ref_class'];
+				}
 
 				$data['footnotes_refs_total_results']++;
 
@@ -134,7 +141,7 @@ class Nsm_footnotes{
 				$footnotes_html .= "<a 
 							href='#{$options['ref_prefix']}{$footnote_count}-{$ref_id}' 
 							id='{$options['fn_prefix']}{$footnote_count}-{$ref_id}'
-							class='{$options['fn_ref_class']}'
+							class='{$ref_class}'
 						>{$ref_content}</a>";
 			}
 
