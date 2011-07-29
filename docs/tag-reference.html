@@ -1,0 +1,75 @@
+<p>NSM Footnotes has one tag that takes care of all your category output needs. Checkout the <a href="/nsm-footnotes#toc-installation:sample_templates">sample templates</a> before reading the following reference.</p> 
+<h2 class="tag" id="exp:nsm_footnotes"><code>&#123;exp:nsm_footnotes&#125;</code></h2> 
+<pre data-tag='exp:nsm_footnotes' class='tag-description'><code>&#123;exp:nsm_footnotes
+([
+    string <span class="param">ref_prefix</span> 
+    string <span class="param">fn_prefix</span> 
+    string <span class="param">ref_class</span> 
+    string <span class="param">entry_id</span> 
+])&#125;</code></pre>
+
+<h3 id="exp:nsm_footnotes.parameters" class="params">Parameters</h3>
+
+<h4 data-tag="exp:nsm_footnotes" title="ref_prefix"><code>ref_prefix</code> <small>[optional]</small></h4>
+<pre><kbd>ref_prefix="ref-"</kbd></pre>
+<p>Prefixed to the <code>id=""</code> attribute of the reference anchors generated in the template. The numerical index of the reference will be concatenated with the <code class="param" data-tag="exp:nsm_footnotes">ref_prefix</code> param. Example output where <code>ref_prefix="ref-"</code>:</p>
+<pre><code>&lt;a href="#fn-0" id="ref-0" class="ref"&gt;0&lt;/a&gt;</code></pre>
+
+<h4 data-tag="exp:nsm_footnotes" title="fn_prefix"><code>fn_prefix</code> <small>[optional]</small></h4>
+<pre><kbd>fn_prefix="fn-"</kbd></pre>
+<p>Similar to <code class="param" data-tag="exp:nsm_footnotes">ref_prefix</code> this parameter is prefixed to the <code>id=""</code> attribute of the footnote anchors generated in the footnote index. The numerical index of the footnote will be concatenated with the <code class="param" data-tag="exp:nsm_footnotes">fn_prefix</code> param. Example output where <code>fn_prefix="fn-"</code>:</p>
+<pre><code>&lt;a href="#ref-0" id="fn-0" class="fn"&gt;0&lt;/a&gt;</code></pre>
+
+<h4 data-tag="exp:nsm_footnotes" title="ref_class"><code>ref_class</code> <small>[optional]</small></h4>
+<pre><kbd>ref_class="ref"</kbd></pre>
+<p>The <code>class=""</code> attribute appiled to the reference anchor. Example output:</p>
+<pre><code>&lt;a href="#fn-0" id="ref-0" class="ref"&gt;0&lt;/a&gt;</code></pre>
+
+<h4 data-tag="exp:nsm_footnotes" title="entry_id"><code>entry_id</code> <small>[optional]</small></h4>
+<pre><kbd>entry_id="1"</kbd></pre>
+<p>The entry id is used to create a unique tag pair. This addresses templates with multple <code class="tag">&#123;exp:nsm_footnotes&#125;</code> tags.</p>
+
+<h3>Single variables</h3>
+
+<h4 id="exp:nsm_footnotes:footnote_total_results" title="footnote_total_results"><code>&#123;footnote_total_results&#125;</code></h4> 
+<p>The total number of footnotes to display.</p> 
+
+<h4 id="exp:nsm_footnotes:footnote_refs_total_results" title="footnote_refs_total_results"><code>&#123;footnote_refs_total_results&#125;</code></h4> 
+<p>The total number of references to display. When using named references a footnote may have more than one reference in the content.</p> 
+
+<h3>Variable pairs</h3>
+
+<h4 id="exp:nsm_footnotes.variable_pairs.ref" title="ref"><code>&#123;ref&#125;&hellip;&#123;/ref&#125;</code></h4>
+<pre><kbd>&#123;ref&#125;Reference content&#123;/ref&#125; - Creates a reference
+&#123;ref name="xxx"&#125;Reference content&#123;/ref&#125; - Creates a named reference
+&#123;ref name="xxx" /&#125; - Reuse a named reference</kbd></pre>
+<p>NSM Footnotes requires references to be added inline using a simple <code>&#123;ref&#125;</code> tag pair. Content inside of the tag pair will become the <a href="#exp:nsm_footnotes.variable_pairs.footnotes.footnote_content"><code>&#123;footnote_content&#125;</code></a> and the tag pair will be replaced with an anchor linking to the generated footnote.</p>
+<p>References can be named using the <code>name=""</code> parameter when the same reference is used multiple times throught a document. Example:</p>
+<pre><code>The first reference: &#123;ref name="ref1" &#125; Footnote content &#123;/ref&#125;
+can be reused later like so: &#123;ref name="ref1" /&#125;</code></pre>
+<p>To reuse the reference use a single <code>&#123;ref&#125;</code> tag with a <code>name=""</code> parameter and a closing slash; Just like a single HTML tag.</p>
+
+
+<h4 id="exp:nsm_footnotes.variable_pairs.footnotes" title="footnotes"><code>&#123;footnotes&#125;&hellip;&#123;/footnotes&#125;</code></h4>
+<pre><kbd>&lt;ul&gt;&#123;footnotes&#125;
+    &lt;li&gt;
+        &#123;footnote_refs&#125;
+            &lt;a href=&quot;#ref-&#123;footnote_ref_id&#125;&quot; id=&quot;fn-&#123;footnote_ref_id&#125;&quot;&gt;
+                &#123;footnote_ref_id&#125;
+            &lt;/a&gt;
+        &#123;/footnote_refs&#125;
+        &#123;footnote_content&#125;
+    &lt;/li&gt;
+&#123;/footnotes&#125;&lt;/ul&gt;</kbd></pre>
+<p>Loop over all of the <strong>unique</strong> references and outputs links back into the document and the footnote content. This tag also has a number of nested tags for outputting a single <a href="#exp:nsm_footnotes.variable_pairs.footnotes.footnote_refs">footnotes references</a> and <a href="#exp:nsm_footnotes.variable_pairs.footnotes.footnote_content">footnote content</a>.</p>
+
+<h5 id="exp:nsm_footnotes.variable_pairs.footnotes.footnote_content" title="footnote_content"><code>&#123;footnote_content&#125;</code></h5>
+<p><strong>This tag pair must be nested inside of the <a href="#exp:nsm_footnotes.variable_pairs.footnotes"><code>&#123;footnotes&#125;&hellip;&#123;/footnotes&#125;</code></a> tag pair above.</strong> The footnote content. This is the content that was parsed from the <code>&#123;ref&#125;&hellip;&#123;/ref&#125;</code> tag pair.</p>
+
+<h5 id="exp:nsm_footnotes.variable_pairs.footnotes.footnote_refs" title="footnote_refs"><code>&#123;footnote_refs&#125;&hellip;&#123;/footnote_refs&#125;</code></h5>
+<p><strong>This tag pair must be nested inside of the <a href="#exp:nsm_footnotes.variable_pairs.footnotes"><code>&#123;footnotes&#125;&hellip;&#123;/footnotes&#125;</code></a> tag pair above.</strong> Loops over the references for a single footnote. The following nested tags are available:</p>
+
+<dl>
+	<dt id="exp:nsm_footnotes.variable_pairs.footnotes.footnote_refs.footnote_ref_id" title="footnote_ref_id"><code>&#123;footnote_ref_id&#125;</code></dt>
+	<dd><strong>This tag pair must be nested inside of the <a href="#exp:nsm_footnotes.variable_pairs.footnotes.footnote_refs"><code>&#123;footnote_refs&#125;&hellip;&#123;/footnote_refs&#125;</code></a> tag pair above.</strong> The footnote reference id. This is a unique id assigned to every reference found in the content. It is used to link the footnote anchors to the anchors generated in the content.</dd>
+</dl>

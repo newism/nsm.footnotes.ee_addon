@@ -1,0 +1,35 @@
+<p class="entry-lead">NSM Footnotes for ExpressionEngine 2.0 allows you to add references to your content while editing and output them as footnotes in your template. Name and reuse the same references throughout the document multiple times. Customise the footnote output just the way you want with flexible tags.</p>
+<div class="figure pull">
+	<img src="/uploads/content/images/addons/nsm-footnotes/example-output.png" width="610" height="370" alt="NSM Footnotes - Example output" />
+</div>
+<h2>Hows it work</h2>
+<h3>Adding references</h3>
+<p>NSM Footnotes requires references to be added inline using a simple <code>&#123;ref&#125;</code> tag pair. Content inside of the tag pair will become the footnote content and the tags will be replaced with an anchor linking to the generated footnote.</p>
+<h4>Reusing references</h4>
+<p>References can be named using the <code>name=""</code> parameter when the same reference is used multiple times throught a document. Example:</p>
+<pre><code>The first reference: &#123;ref name="ref1" &#125; Footnote content &#123;/ref&#125;
+can be reused later like so: &#123;ref name="ref1" /&#125;</code></pre>
+<p>To reuse the reference use a single <a href="./nsm-footnotes/tag-reference/#exp:nsm_footnotes.variable_pairs.ref"><code>&#123;ref&#125;</code></a> tag with a <code>name=""</code> parameter and a closing slash; Just like a single HTML tag.</p>
+<h3>Output references as footnotes</h3>
+<p>NSM Footnotes has a flexible tag pair for out putting the footnotes. There's plenty of options to checkout in the <a href="./nsm-footnotes/tag-reference">tag reference</a>.</p>
+
+<h2>Requirements</h2>
+<p>Technical requirements include:</p>
+<ul>
+	<li><a href="http://expressionengine.com" target="_blank">ExpressionEngine 2</a></li>
+	<li><a href="http://php.net" target="_blank">PHP 5.2+</a></li>
+</ul>
+
+<h2>Installation</h2>
+<ol>
+	<li><a href="#download">Download</a> the latest version of NSM Footnotes.</li>
+	<li>Extract the .zip file to your desktop</li>
+	<li>Copy <code class="folder-path">system/expressionengine/third_party/nsm_footnotes</code> to <code class="folder-path">system/expressionengine/third_party</code></li>
+</ol>
+<h3>Sample templates</h3>
+<p>The download includes sample templates to kick start your implementation.</p>
+<ol>
+	<li>Copy <code>samples/nsm_footnotes.group</code> to your template directory</li>
+	<li><a href="http://expressionengine.com/user_guide/cp/design/templates/synchronize_templates.html" target="_blank">Syncronise the templates</a></li>
+	<li>Browse to http://yoursite.com/index.php?nsm_footnotes</li>
+</ol>
