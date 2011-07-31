@@ -4,14 +4,15 @@
 </div>
 <h2>Hows it work</h2>
 <h3>Adding references</h3>
-<p>NSM Footnotes requires references to be added inline using a simple <code>&#123;ref&#125;</code> tag pair. Content inside of the tag pair will become the footnote content and the tags will be replaced with an anchor linking to the generated footnote.</p>
+<p>Adding references to your content is very simple. Wrap double brackets ([[&hellip;]]) around any text or html that you would like to become a reference in your footnotes and NSM Footnotes will store this as a footnote for rendering later in the &#123;footnotes&#125; tag-pair.</p>
+
 <h4>Reusing references</h4>
-<p>References can be named using the <code>name=""</code> parameter when the same reference is used multiple times throught a document. Example:</p>
-<pre><code>The first reference: &#123;ref name="ref1" &#125; Footnote content &#123;/ref&#125;
-can be reused later like so: &#123;ref name="ref1" /&#125;</code></pre>
-<p>To reuse the reference use a single <a href="./nsm-footnotes/tag-reference/#exp:nsm_footnotes.variable_pairs.ref"><code>&#123;ref&#125;</code></a> tag with a <code>name=""</code> parameter and a closing slash; Just like a single HTML tag.</p>
+<p>References can be named by adding a hash(#) and a reference identifier when the same reference is used multiple times throughout a document. Example:</p>
+<pre><code>The first reference: [[ #ref1 Footnote content ]]
+can be reused later like so: [[ #ref1 ]]</code></pre>
+
 <h3>Output references as footnotes</h3>
-<p>NSM Footnotes has a flexible tag pair for out putting the footnotes. There's plenty of options to checkout in the <a href="./nsm-footnotes/tag-reference">tag reference</a>.</p>
+<p>NSM Footnotes has a flexible tag pair for out putting the footnotes. There's plenty of options to check out in the <a href="./nsm-footnotes/tag-reference">tag reference</a>.</p>
 
 <h2>Requirements</h2>
 <p>Technical requirements include:</p>
