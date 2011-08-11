@@ -85,7 +85,7 @@ class Nsm_footnotes{
 		);
 
 		// building up a list item incase their is a single {footnotes} tag
-		$footnotes_html = "<ul class=".$options['fn_list_class'].">";
+		$footnotes_html = " <ul class=".$options['fn_list_class']."> ";
 
 		$footnote_count = 0;
 		foreach ($footnotes as $footnote) {
@@ -101,11 +101,11 @@ class Nsm_footnotes{
 			$ref_count = 0;
 
 			// building up a list item incase their is a single {footnotes} tag
-			$footnotes_html .= "<li class='".$options['fn_class']."'>";
-			$footnotes_html .= "<span class='".$options['fn_count_class']."'>".$footnote_count."</span>";
+			$footnotes_html .= " <li class='".$options['fn_class']."'> ";
+			$footnotes_html .= " <span class='".$options['fn_count_class']."'>".$footnote_count."</span> ";
 
 			if(count($footnote['refs']) > 1) {
-				$footnotes_html .= "<span class='".$options['fn_caret_class']."'>^</span>";
+				$footnotes_html .= " <span class='".$options['fn_caret_class']."'>^</span> ";
 			}
 
 			foreach ($footnote['refs'] as $ref) {
@@ -117,7 +117,7 @@ class Nsm_footnotes{
 					$ref_content = $ref_id;
 					$ref_class = $options['fn_ref_class'];
 				} else {
-					$ref_content = "^";
+					$ref_content = " ^ ";
 					$ref_class = $options['fn_caret_class'] . " " . $options['fn_ref_class'];
 				}
 
@@ -130,27 +130,27 @@ class Nsm_footnotes{
 				);
 
 				$tagdata = str_replace($ref['0'], 
-								"<a 
+								" <a 
 									href='#{$options['fn_prefix']}{$footnote_count}-{$ref_id}'
 									id='{$options['ref_prefix']}{$footnote_count}-{$ref_id}'
 									class='{$options['ref_class']}'
-								>{$footnote_count}</a>"
+								>{$footnote_count}</a> "
 							, $tagdata);
 
 				// building up a list item incase their is a single {footnotes} tag
-				$footnotes_html .= "<a 
+				$footnotes_html .= " <a 
 							href='#{$options['ref_prefix']}{$footnote_count}-{$ref_id}' 
 							id='{$options['fn_prefix']}{$footnote_count}-{$ref_id}'
 							class='{$ref_class}'
-						>{$ref_content}</a>";
+						>{$ref_content}</a> ";
 			}
 
 			// building up a list item incase their is a single {footnotes} tag
-			$footnotes_html .= $fn['footnote_content'] . "</li>";
+			$footnotes_html .= $fn['footnote_content'] . " </li>";
 
 			$data['footnotes'][] = $fn;
 		}
-		$footnotes_html .= "</ul>";
+		$footnotes_html .= " </ul> ";
 
 		// Tagpair or single tag
 		if(in_array('footnotes', $EE->TMPL->var_single) == false) {
