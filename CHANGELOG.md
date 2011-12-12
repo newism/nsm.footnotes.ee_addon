@@ -1,7 +1,13 @@
 NSM Footnotes - Changelog
 ==========================
 
+v0.3.0
+------
+
+* Updated documentation to match revised footnotes processing.
+
 v0.2.2
+------
 
 * Single references now have both `fn_ref_class` and `fn_caret_class` applied. Multiple references only have `fn_ref_class` applied.
 
