@@ -8,9 +8,9 @@ require PATH_THIRD.'nsm_footnotes/config.php';
  * Generally a module is better to use than a plugin if if it has not CP backend
  *
  * @package			NsmFootnotes
- * @version			0.1.0
+ * @version			0.3.0
  * @author			Leevi Graham <http://leevigraham.com>
- * @copyright 		Copyright (c) 2007-2010 Newism <http://newism.com.au>
+ * @copyright 		Copyright (c) 2007-2011 Newism <http://newism.com.au>
  * @license 		Commercial - please see LICENSE file included with this distribution
  * @link			http://expressionengine-addons.com/nsm-footnotes
  * @see 			http://expressionengine.com/public_beta/docs/development/plugins.html
