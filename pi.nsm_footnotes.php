@@ -60,8 +60,13 @@ class Nsm_footnotes{
 			'fn_ref_class' => $EE->TMPL->fetch_param('fn_ref_class', 'footnote-reference'),
 			'fn_caret_class' =>  $EE->TMPL->fetch_param('fn_caret_class', 'footnote-caret'),
 		);
-
+		
 		preg_match_all("#".$options['left_delimiter']."\s*(\#[^\s]+)?(.*?)".$options['right_delimiter']."#", $tagdata, $matches, PREG_SET_ORDER);
+
+		// no matches? exit
+		if (empty($matches)) {
+			return false;
+		}
 
 		$footnotes = array();
 		foreach ($matches as $count => $match) {
