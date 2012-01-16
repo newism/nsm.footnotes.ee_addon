@@ -30,7 +30,7 @@ $plugin_info = array(
 	'pi_usage' => "http://ee-garage.com/nsm-footnotes"
 );
 
-class Nsm_footnotes{
+class Nsm_footnotes {
 
 	/**
 	 * The return string
@@ -42,7 +42,8 @@ class Nsm_footnotes{
 	/**
 	 * Parses the tag content for references and outputs them as footnotes
 	 */
-	function Nsm_footnotes() {
+	function Nsm_footnotes()
+	{
 
 		$EE =& get_instance();
 		$tagdata = $EE->TMPL->tagdata;
@@ -61,18 +62,36 @@ class Nsm_footnotes{
 			'fn_caret_class' =>  $EE->TMPL->fetch_param('fn_caret_class', 'footnote-caret'),
 		);
 		
-		preg_match_all("#".$options['left_delimiter']."\s*(\#[^\s]+)?(.*?)".$options['right_delimiter']."#", $tagdata, $matches, PREG_SET_ORDER);
+		$data = array(
+			'footnotes_html' => '',
+			'footnotes_total_results' => 0,
+			'footnotes_refs_total_results' => 0
+		);
+		
+		preg_match_all(
+			'#'.$options['left_delimiter'].'\s*(\#[^\s]+)?(.*?)'.$options['right_delimiter'].'#',
+			$tagdata,
+			$matches,
+			PREG_SET_ORDER
+		);
 
 		// no matches? exit
 		if (empty($matches)) {
-			return false;
+			$tagdata = preg_replace(
+				'/('.LD.'footnotes'.RD.')(.*)('.LD.'\/footnotes'.RD.')/s',
+				'',
+				$tagdata
+			);
+			$tagdata = str_replace(LD.'footnotes'.RD, '', $tagdata);
+			$this->return_data = $this->replace_footnotes_tags($tagdata, $data);
+			return;
 		}
 
 		$footnotes = array();
 		foreach ($matches as $count => $match) {
 			$content = trim($match[2]);
-			if(empty($match[1]) == false) {
-				if(empty($content) == false) {
+			if (empty($match[1]) == false) {
+				if (empty($content) == false) {
 					$footnotes[$match[1]]['content'] = $content;
 				}
 				$footnotes[$match[1]]['refs'][] = $match;
@@ -84,13 +103,10 @@ class Nsm_footnotes{
 			}
 		}
 
-		$data = array(
-			'footnotes_total_results' => count($footnotes),
-			'footnotes_refs_total_results' => 0
-		);
+		$data['footnotes_total_results'] = count($footnotes);
 
 		// building up a list item incase their is a single {footnotes} tag
-		$footnotes_html = " <ul class=".$options['fn_list_class']."> ";
+		$footnotes_html = ' <ul class="'.$options['fn_list_class'].'"> ';
 
 		$footnote_count = 0;
 		foreach ($footnotes as $footnote) {
@@ -109,7 +125,7 @@ class Nsm_footnotes{
 			$footnotes_html .= " <li class='".$options['fn_class']."'> ";
 			$footnotes_html .= " <span class='".$options['fn_count_class']."'>".$footnote_count."</span> ";
 
-			if(count($footnote['refs']) > 1) {
+			if (count($footnote['refs']) > 1) {
 				$footnotes_html .= " <span class='".$options['fn_caret_class']."'>^</span> ";
 			}
 
@@ -118,7 +134,7 @@ class Nsm_footnotes{
 
 				$ref_id = $this->num_to_letter($ref_count);
 
-				if(count($footnote['refs']) > 1){
+				if (count($footnote['refs']) > 1) {
 					$ref_content = $ref_id;
 					$ref_class = $options['fn_ref_class'];
 				} else {
@@ -156,17 +172,31 @@ class Nsm_footnotes{
 			$data['footnotes'][] = $fn;
 		}
 		$footnotes_html .= " </ul> ";
+		$data['footnotes_html'] = $footnotes_html;
+		
+		$this->return_data = $this->replace_footnotes_tags($tagdata, $data);
+	}
 
+	/**
+	 * Returns the tag data without the footnotes content
+	 *
+	 * @access	public
+	 * @param	string	tagdata to process
+	 * @param	array	values to string replace with
+	 * @return	string	processed tagdata
+	 */
+	function replace_footnotes_tags($tagdata, $data)
+	{
+		$EE =& get_instance();
 		// Tagpair or single tag
-		if(in_array('footnotes', $EE->TMPL->var_single) == false) {
+		if (!in_array('footnotes', $EE->TMPL->var_single)) {
 			$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
-		}
-		else {
+		} else {
 			$tagdata = $EE->functions->prep_conditionals($tagdata, $data);
-			$tagdata = str_replace(LD."footnotes".RD, $footnotes_html, $tagdata);
+			$tagdata = $EE->TMPL->parse_variables_row($tagdata, $data);
+			$tagdata = str_replace(LD.'footnotes'.RD, $data['footnotes_html'], $tagdata);
 		}
-
-		$this->return_data = $tagdata;
+		return $tagdata;
 	}
 
 	/**
